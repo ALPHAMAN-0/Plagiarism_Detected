@@ -7,6 +7,11 @@ under ``data/indexes/``.
 
 This is intentionally not FAISS — at MVP scale (≤ 10k documents) numpy
 top-k via argsort is fast enough and avoids a heavyweight dependency.
+
+A configurable ``max_items`` cap (default 10,000) prevents unbounded memory
+growth in long-running deployments. When the cap is reached, the oldest
+entries are evicted FIFO. This mirrors the fix MiroFish applied to
+``fetch_all_edges`` (PR #513).
 """
 
 from __future__ import annotations
@@ -18,6 +23,8 @@ from pathlib import Path
 import numpy as np
 
 from .security import safe_join
+
+DEFAULT_MAX_ITEMS = 10_000
 
 
 @dataclass
@@ -36,6 +43,7 @@ class VectorIndex:
     name: str
     entries: list[IndexEntry] = field(default_factory=list)
     vectors: np.ndarray | None = None  # (N, D)
+    max_items: int = DEFAULT_MAX_ITEMS
 
     def add(self, source_id: int, text: str, vector: np.ndarray) -> None:
         v = vector.astype(np.float32, copy=False)
@@ -43,6 +51,11 @@ class VectorIndex:
         if n > 0:
             v = v / n
         self.entries.append(IndexEntry(source_id=source_id, text=text, vector=v))
+        # Evict oldest entries if we exceed the cap. FIFO is the simplest
+        # policy that preserves insertion order and works for all callers.
+        if self.max_items > 0 and len(self.entries) > self.max_items:
+            overflow = len(self.entries) - self.max_items
+            del self.entries[:overflow]
         self.vectors = None  # invalidate cached matrix
 
     def _ensure_matrix(self) -> np.ndarray:
