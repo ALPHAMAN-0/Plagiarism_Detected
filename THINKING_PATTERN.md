@@ -380,8 +380,9 @@ commit.**
 | 8.1 | Thinking pattern + skills wired up | 2026-10-10 | 2026-10-10 | this file + `~/.puku-cli/skills/commit-thinking/SKILL.md` + `.puku-cli/skills/commit-thinking/SKILL.md` |
 | 8.2 | Winnowing near-copy + vector_index cap (maintenance) | 2026-10-10 | 2026-10-10 | branch `fix/winnowing-near-copy`: `37fe413` (RED test), `5167b7d` (GREEN fix), `f1b813d` (RED test), `9bc4ed9` (GREEN cap). 59 passed, 1 skipped. |
 | 8.3 | AI-detect P(ai) floor fix | 2026-10-10 | 2026-10-10 | branch `fix/heuristic-fixes`: `2175726` (RED test), `1fa309f` (GREEN heuristic rewrite). 63 passed, 1 skipped. Trained model still pending. |
-| 9 | **ARCHITECTURE.md** | — | — | **NEXT** |
-| 10 | Step1Upload | — | — | — |
+| 9 | **ARCHITECTURE.md** | 2026-10-10 | 2026-10-10 | `b724bdf` — 13 sections, 325 lines. Includes §4.1 (Winnowing fix history) and §5.3 (heuristic rewrite history) so post-mortems don't get re-introduced. |
+| 9.5 | Trained AI classifier | 2026-10-10 | 2026-10-10 | `fe6bb91` (RED smoke test), `5614c2e` (labelled training set, 45 rows), `ec9f9f6` (drop deprecated `multi_class` kwarg), `5503ecf` (`make backend-train`). 5-fold CV accuracy 0.931 ± 0.002. `backend/app/ml_models/ai_classifier.joblib` is gitignored (reproducible build artifact). 67 passed, 1 skipped, 85.45% coverage. |
+| 10 | Step1Upload | — | — | **NEXT** |
 | 11 | Step2AlgorithmPicker | — | — | — |
 | 12 | Step3Results | — | — | — |
 | 13 | Step4History | — | — | — |
