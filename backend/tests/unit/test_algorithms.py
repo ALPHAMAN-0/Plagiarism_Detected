@@ -117,3 +117,52 @@ def test_winnowing_helpers() -> None:
     fp2 = winnow(text.split(), k=3, w=2)
     assert fp1 == fp2
     assert len(fp1) > 0
+
+
+# ---------------------------------------------------------------------------
+# Winnowing-specific tests on a realistic-length corpus (>= k tokens).
+# ---------------------------------------------------------------------------
+
+
+def test_winnowing_exact_copy_scores_one() -> None:
+    """An exact copy of a corpus chunk should score ~1.0 on Winnowing."""
+    from app.services.algorithms.winnowing import WinnowingAlgo
+
+    corpus = [
+        "The history of the Roman Empire is long and complex, spanning many "
+        "centuries of political, military, and cultural development. From the "
+        "founding of the city of Rome through the fall of the Western Roman "
+        "Empire in 476 AD, the Romans established one of the largest empires "
+        "in ancient history, controlling territory across Europe, North Africa, "
+        "and the Middle East at its peak."
+    ]
+    algo = WinnowingAlgo()
+    algo.fit(corpus)
+    matches = algo.score([corpus[0]], top_k=1)
+    assert matches, "exact copy should match"
+    assert matches[0].similarity >= 0.99
+
+
+def test_winnowing_near_copy_ranks_above_unrelated() -> None:
+    """A near copy (one word inserted) should score higher than an unrelated doc."""
+    from app.services.algorithms.winnowing import WinnowingAlgo
+
+    corpus = [
+        "The history of the Roman Empire is long and complex, spanning many "
+        "centuries of political, military, and cultural development. From the "
+        "founding of the city of Rome through the fall of the Western Roman "
+        "Empire in 476 AD, the Romans established one of the largest empires "
+        "in ancient history, controlling territory across Europe, North Africa, "
+        "and the Middle East at its peak."
+    ]
+    near_copy = corpus[0].replace("founding of the city", "founding of the great city", 1)
+    unrelated = (
+        "I went to the grocery store yesterday to buy milk and bread for "
+        "breakfast with the family."
+    )
+    algo = WinnowingAlgo()
+    algo.fit(corpus)
+    near = algo.score([near_copy], top_k=1)[0].similarity
+    unrel = algo.score([unrelated], top_k=1)[0].similarity
+    assert near > unrel, f"near ({near:.3f}) should beat unrelated ({unrel:.3f})"
+    assert near >= 0.4, f"near copy should retain >=40% overlap, got {near:.3f}"
