@@ -1328,7 +1328,7 @@ requires-dist = [
     { name = "charset-normalizer", specifier = ">=3.3.0" },
     { name = "docx2txt", specifier = ">=0.8" },
     { name = "fastapi", specifier = ">=0.115.0" },
-    { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.27.0" },
+    { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.28.0" },
     { name = "joblib", specifier = ">=1.4.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.13.0" },
     { name = "nltk", specifier = ">=3.9.0" },
