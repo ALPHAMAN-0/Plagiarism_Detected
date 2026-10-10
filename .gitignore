@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+*.egg-info/
+dist/
+build/
+.uv-cache/
+
+# Node / React
+node_modules/
+dist/
+.vite/
+*.local
+.DS_Store
+
+# Env / secrets (CRITICAL — keep out of repo)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# Runtime data (uploads, indexes, ML models)
+backend/data/uploads/*
+!backend/data/uploads/.gitkeep
+backend/data/indexes/*
+!backend/data/indexes/.gitkeep
+backend/app/ml_models/*.joblib
+backend/app/ml_models/*.pkl
+!backend/app/ml_models/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+.pytest_cache/
+coverage/
+.nyc_output/

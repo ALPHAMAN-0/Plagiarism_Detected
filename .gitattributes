@@ -1,0 +1,16 @@
+* text=auto eol=lf
+
+# Markdown
+*.md linguist-detectable=true
+
+# Python
+*.py linguist-language=Python
+pyproject.toml linguist-language=Toml
+
+# TypeScript / React
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+
+# Exclude generated files from GitHub language stats
+backend/app/ml_models/* linguist-generated=true
+frontend/dist/* linguist-generated=true
