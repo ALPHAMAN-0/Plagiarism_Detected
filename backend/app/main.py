@@ -16,7 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from .config import get_settings
-from .routers import health
+from .routers import analyses, corpus, documents, health, predict
 
 
 def _configure_logging(level: str) -> None:
@@ -89,10 +89,10 @@ def create_app() -> FastAPI:
 
     # Routers
     app.include_router(health.router)
-    # Future: app.include_router(documents.router, prefix="/api/v1")
-    # Future: app.include_router(corpus.router, prefix="/api/v1")
-    # Future: app.include_router(analyses.router, prefix="/api/v1")
-    # Future: app.include_router(predict.router, prefix="/api/v1")
+    app.include_router(documents.router)
+    app.include_router(corpus.router)
+    app.include_router(analyses.router)
+    app.include_router(predict.router)
 
     return app
 

@@ -37,10 +37,16 @@ def tmp_data_dir(monkeypatch: pytest.MonkeyPatch) -> Iterator[Path]:
 
 @pytest.fixture
 def client(tmp_data_dir: Path) -> Iterator[TestClient]:
-    """FastAPI test client with isolated config."""
+    """FastAPI test client with isolated config + reset singletons."""
     # Import inside the fixture so env vars are set first
     from app.main import create_app
+    from app.services import document_store
+
+    # Reset the singleton in-memory store between tests
+    document_store.reset_store()
 
     app = create_app()
     with TestClient(app) as c:
         yield c
+        # Clean up after the test too
+        document_store.reset_store()
