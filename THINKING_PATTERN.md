@@ -378,6 +378,7 @@ commit.**
 | 7 | Dep upgrade (CVE) | 2026-10-10 | 2026-10-10 | `87951d4` |
 | 8 | TDD evidence report | 2026-10-10 | 2026-10-10 | `9c99c88` |
 | 8.1 | Thinking pattern + skills wired up | 2026-10-10 | 2026-10-10 | this file + `~/.puku-cli/skills/commit-thinking/SKILL.md` + `.puku-cli/skills/commit-thinking/SKILL.md` |
+| 8.2 | Winnowing near-copy + vector_index cap (maintenance) | 2026-10-10 | 2026-10-10 | branch `fix/winnowing-near-copy`: `37fe413` (RED test), `5167b7d` (GREEN fix), `f1b813d` (RED test), `9bc4ed9` (GREEN cap). 59 passed, 1 skipped. |
 | 9 | **ARCHITECTURE.md** | — | — | **NEXT** |
 | 10 | Step1Upload | — | — | — |
 | 11 | Step2AlgorithmPicker | — | — | — |
