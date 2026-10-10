@@ -66,7 +66,10 @@ def train(csv_path: Path, out_path: Path, max_examples: int | None = None) -> fl
     pipe = Pipeline(
         [
             ("scaler", StandardScaler()),
-            ("clf", LogisticRegression(max_iter=1000, multi_class="auto")),
+            # ``multi_class`` was deprecated in scikit-learn 1.5 and
+            # removed in 1.6. Multinomial (softmax) LR is the default for
+            # multiclass problems; nothing to pass.
+            ("clf", LogisticRegression(max_iter=1000)),
         ]
     )
 
