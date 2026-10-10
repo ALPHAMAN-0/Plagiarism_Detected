@@ -77,7 +77,7 @@ class VectorIndex:
         return path
 
     @classmethod
-    def load(cls, name: str, indexes_dir: Path) -> "VectorIndex":
+    def load(cls, name: str, indexes_dir: Path) -> VectorIndex:
         path = safe_join(indexes_dir, f"{name}.npz")
         idx = cls(name=name)
         if not path.exists():

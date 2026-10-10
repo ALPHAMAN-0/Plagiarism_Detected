@@ -7,7 +7,6 @@ overrides and real environment variables in production.
 
 from __future__ import annotations
 
-import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -56,9 +55,7 @@ class Settings(BaseSettings):
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         ]
     )
-    allowed_extensions: list[str] = Field(
-        default_factory=lambda: ["pdf", "txt", "docx"]
-    )
+    allowed_extensions: list[str] = Field(default_factory=lambda: ["pdf", "txt", "docx"])
 
     # Auth (optional)
     api_key: str | None = None

@@ -12,6 +12,7 @@ near-exact copies.
 from __future__ import annotations
 
 import re
+from typing import Hashable
 
 from .base import Match
 
@@ -27,7 +28,7 @@ def shingle(text: str, n: int = 5) -> set[str]:
     return {" ".join(tokens[i : i + n]) for i in range(len(tokens) - n + 1)}
 
 
-def jaccard(a: set[str], b: set[str]) -> float:
+def jaccard(a: set[Hashable], b: set[Hashable]) -> float:
     """Jaccard index of two sets, in [0, 1]."""
     if not a and not b:
         return 0.0
@@ -50,9 +51,7 @@ class JaccardAlgo:
         self._corpus_shingles = [shingle(c, self.n) for c in corpus_chunks]
         self._corpus_snippets = list(corpus_chunks)
 
-    def score(
-        self, query_chunks: list[str], top_k: int = 5, threshold: float = 0.0
-    ) -> list[Match]:
+    def score(self, query_chunks: list[str], top_k: int = 5, threshold: float = 0.0) -> list[Match]:
         if not query_chunks or not self._corpus_shingles:
             return []
         out: list[Match] = []
@@ -61,7 +60,7 @@ class JaccardAlgo:
             if not qs:
                 continue
             scored = [
-                (j, jaccard(qs, cs))
+                (j, jaccard(qs, cs))  # type: ignore[arg-type]
                 for j, cs in enumerate(self._corpus_shingles)
                 if cs
             ]
@@ -87,4 +86,4 @@ def _shorten(text: str, limit: int = 240) -> str:
     return text[: limit - 1] + "…"
 
 
-__all__ = ["JaccardAlgo", "shingle", "jaccard"]
+__all__ = ["JaccardAlgo", "jaccard", "shingle"]

@@ -31,4 +31,4 @@ def sha256_file(path: str) -> str:
     return h.hexdigest()
 
 
-__all__ = ["sha256_bytes", "sha256_text", "sha256_file"]
+__all__ = ["sha256_bytes", "sha256_file", "sha256_text"]

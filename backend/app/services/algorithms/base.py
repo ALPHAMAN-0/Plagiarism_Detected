@@ -15,10 +15,10 @@ from typing import Protocol, runtime_checkable
 class Match:
     """A single similarity match between a query chunk and a corpus chunk."""
 
-    source_ref: int            # index into the corpus
-    similarity: float          # in [0, 1]
-    snippet: str               # short excerpt of the matched corpus chunk
-    chunk_index: int = 0       # query-side chunk index (for UI highlighting)
+    source_ref: int  # index into the corpus
+    similarity: float  # in [0, 1]
+    snippet: str  # short excerpt of the matched corpus chunk
+    chunk_index: int = 0  # query-side chunk index (for UI highlighting)
 
     def __post_init__(self) -> None:
         # Clamp into [0, 1] — algorithms can occasionally overshoot due to
@@ -37,9 +37,7 @@ class SimilarityAlgo(Protocol):
         """Index a corpus of reference chunks. Idempotent."""
         ...
 
-    def score(
-        self, query_chunks: list[str], top_k: int = 5, threshold: float = 0.0
-    ) -> list[Match]:
+    def score(self, query_chunks: list[str], top_k: int = 5, threshold: float = 0.0) -> list[Match]:
         """Return top-k matches for the given query chunks (filtered by threshold)."""
         ...
 

@@ -40,11 +40,11 @@ def _load_csv(path: Path) -> tuple[list[str], list[str]]:
         reader = csv.DictReader(f)
         for row in reader:
             t = (row.get("text") or "").strip()
-            l = (row.get("label") or "").strip().lower()
-            if not t or l not in CLASSES:
+            label = (row.get("label") or "").strip().lower()
+            if not t or label not in CLASSES:
                 continue
             texts.append(t)
-            labels.append(l)
+            labels.append(label)
     return texts, labels
 
 
@@ -60,7 +60,7 @@ def train(csv_path: Path, out_path: Path, max_examples: int | None = None) -> fl
         labels = [labels[i] for i in idx]
 
     logger.info("Extracting features from %d documents...", len(texts))
-    X = np.stack([extract_features(t).to_array() for t in texts], axis=0)
+    X = np.stack([extract_features(t).to_array() for t in texts], axis=0)  # noqa: N806
     y = np.array(labels)
 
     pipe = Pipeline(

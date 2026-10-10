@@ -5,6 +5,7 @@ Documents router — multipart upload, ingest, persist in store.
 from __future__ import annotations
 
 import logging
+
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 
 from ..config import get_settings

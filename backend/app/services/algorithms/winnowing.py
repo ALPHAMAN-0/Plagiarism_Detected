@@ -25,7 +25,10 @@ _TOKEN_RE = re.compile(r"\w+", re.UNICODE)
 def _hash_kgram(tokens: list[str], i: int, k: int) -> int:
     """Hash a k-gram starting at position ``i``."""
     gram = " ".join(tokens[i : i + k])
-    h = hashlib.md5(gram.encode("utf-8")).digest()
+    # MD5 is the standard MOSS fingerprint hash; this is a non-crypto
+    # use (text fingerprinting). `usedforsecurity=False` tells bandit/ruff
+    # this is intentionally not a security-sensitive hash.
+    h = hashlib.md5(gram.encode("utf-8"), usedforsecurity=False).digest()
     return int.from_bytes(h[:4], "big")
 
 
@@ -52,10 +55,8 @@ def winnow(tokens: list[str], k: int = 25, w: int = 4) -> list[int]:
     # Slide a window of size w across the hashes
     for i in range(len(hashes) - w + 1):
         window = hashes[i : i + w]
-        # Pick rightmost minimum — Schleimer-Wilkerson-Aiken convention
+        # Pick minimum of window per Schleimer-Wilkerson-Aiken
         min_val = min(window)
-        min_idx_from_right = w - 1 - window[::-1].index(min_val)
-        min_global_idx = i + min_idx_from_right
         if min_val != last_min:
             fingerprints.append(min_val)
             last_min = min_val
@@ -79,14 +80,11 @@ class WinnowingAlgo:
 
     def fit(self, corpus_chunks: list[str]) -> None:
         self._corpus_fps = [
-            _fingerprint_set(_TOKEN_RE.findall(c.lower()), self.k, self.w)
-            for c in corpus_chunks
+            _fingerprint_set(_TOKEN_RE.findall(c.lower()), self.k, self.w) for c in corpus_chunks
         ]
         self._corpus_snippets = list(corpus_chunks)
 
-    def score(
-        self, query_chunks: list[str], top_k: int = 5, threshold: float = 0.0
-    ) -> list[Match]:
+    def score(self, query_chunks: list[str], top_k: int = 5, threshold: float = 0.0) -> list[Match]:
         if not query_chunks or not self._corpus_fps:
             return []
         out: list[Match] = []
@@ -95,7 +93,7 @@ class WinnowingAlgo:
             if not qfp:
                 continue
             scored = [
-                (j, jaccard(qfp, cf))
+                (j, jaccard(qfp, cf))  # type: ignore[arg-type]
                 for j, cf in enumerate(self._corpus_fps)
                 if cf
             ]

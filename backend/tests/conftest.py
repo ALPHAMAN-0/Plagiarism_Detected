@@ -7,12 +7,10 @@ SQLite DB. No network. No global state.
 
 from __future__ import annotations
 
-import os
 import shutil
 import tempfile
 from collections.abc import Iterator
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 from fastapi.testclient import TestClient

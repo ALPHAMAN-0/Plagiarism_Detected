@@ -5,6 +5,7 @@ Corpus router — add documents to the reference corpus.
 from __future__ import annotations
 
 import logging
+
 from fastapi import APIRouter, HTTPException, status
 
 from ..schemas import CorpusAddRequest, CorpusAddResponse

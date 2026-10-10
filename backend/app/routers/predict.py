@@ -5,6 +5,7 @@ Predict router — POST /api/v1/predict returns a 3-class probability.
 from __future__ import annotations
 
 import logging
+
 from fastapi import APIRouter, HTTPException, status
 
 from ..config import get_settings

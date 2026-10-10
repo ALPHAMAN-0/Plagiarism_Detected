@@ -26,7 +26,6 @@ import pytest
 from app.services.algorithms.base import Match
 from app.services.algorithms.registry import ALGOS, get_algo
 
-
 CORPUS = [
     "The quick brown fox jumps over the lazy dog every morning.",
     "Climate change is a long-term shift in global weather patterns.",
@@ -55,6 +54,7 @@ def test_registry_contains_all_algorithms() -> None:
 
 def test_get_algo_raises_for_unknown() -> None:
     from app.services.algorithms.registry import UnknownAlgorithmError
+
     with pytest.raises(UnknownAlgorithmError):
         get_algo("nonexistent")
 
@@ -100,7 +100,7 @@ def test_similarity_threshold_filtering(algo) -> None:
 
 def test_shingle_helpers() -> None:
     """Jaccard shingle helper is exported and stable."""
-    from app.services.algorithms.jaccard import shingle, jaccard
+    from app.services.algorithms.jaccard import jaccard, shingle
 
     a = shingle("the cat sat on the mat", n=3)
     b = shingle("the cat sat on a mat", n=3)

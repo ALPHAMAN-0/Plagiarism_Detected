@@ -8,23 +8,22 @@ User journeys:
 
 from __future__ import annotations
 
-import io
 from pathlib import Path
 
 import pytest
 
-from app.services.ingest import extract_text, SUPPORTED_EXTENSIONS
+from app.services.ingest import SUPPORTED_EXTENSIONS, extract_text
 from app.services.security import (
+    FileValidationError,
+    PathTraversalError,
     safe_filename,
     safe_join,
     validate_extension,
     validate_size,
-    FileValidationError,
-    PathTraversalError,
 )
 
-
 # ---------- happy path ----------
+
 
 def test_extract_text_from_txt_bytes() -> None:
     payload = b"Hello, world.\nThis is a test document."
@@ -40,6 +39,7 @@ def test_supported_extensions_includes_txt_pdf_docx() -> None:
 
 
 # ---------- security ----------
+
 
 def test_safe_filename_strips_path_traversal() -> None:
     assert safe_filename("../../etc/passwd") == "passwd"

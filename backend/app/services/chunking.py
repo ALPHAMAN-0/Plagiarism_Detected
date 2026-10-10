@@ -86,4 +86,4 @@ def chunk_text(
     return [c for c in chunks if c.strip()]
 
 
-__all__ = ["split_sentences", "chunk_text"]
+__all__ = ["chunk_text", "split_sentences"]

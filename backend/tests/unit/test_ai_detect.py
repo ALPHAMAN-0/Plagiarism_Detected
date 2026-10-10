@@ -10,14 +10,14 @@ import math
 
 import numpy as np
 
+from app.services.ai_detect.burstiness import burstiness
+from app.services.ai_detect.classifier import CLASSES, predict_proba
 from app.services.ai_detect.features import (
     extract_features,
     lexical_features,
     split_sentences,
     tokenize,
 )
-from app.services.ai_detect.burstiness import burstiness
-from app.services.ai_detect.classifier import predict_proba, CLASSES
 from app.services.ai_detect.perplexity import mean_perplexity
 
 
@@ -44,10 +44,7 @@ def test_burstiness_zero_for_uniform_lengths() -> None:
 
 def test_burstiness_higher_for_mixed_lengths() -> None:
     short = "Hi. Hi. Hi. Hi. Hi."
-    long = (
-        "This is a much longer sentence that contains many words. "
-        "Tiny. " * 20
-    )
+    long = "This is a much longer sentence that contains many words. Tiny. " * 20
     assert burstiness(long) > burstiness(short)
 
 

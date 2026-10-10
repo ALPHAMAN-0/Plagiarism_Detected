@@ -18,9 +18,7 @@ pipeline keeps working.
 
 from __future__ import annotations
 
-import math
 import re
-from collections import Counter
 from dataclasses import dataclass
 
 import numpy as np
@@ -122,8 +120,9 @@ def enrich_with_perplexity(features: FeatureVector, text: str) -> FeatureVector:
     """
     try:
         from .perplexity import mean_perplexity  # local import to avoid hard dep
+
         ppl_mean, ppl_std = mean_perplexity(text)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return features
     return FeatureVector(
         perplexity_mean=ppl_mean,
@@ -143,9 +142,9 @@ def extract_features(text: str) -> FeatureVector:
 
 __all__ = [
     "FeatureVector",
+    "enrich_with_perplexity",
     "extract_features",
     "lexical_features",
-    "enrich_with_perplexity",
     "split_sentences",
     "tokenize",
 ]

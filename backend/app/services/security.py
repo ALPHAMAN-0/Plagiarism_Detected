@@ -7,7 +7,6 @@ without spinning up the FastAPI app.
 
 from __future__ import annotations
 
-import os
 import re
 import unicodedata
 from pathlib import Path
@@ -71,9 +70,7 @@ def validate_extension(filename: str, allowed: frozenset[str] = SUPPORTED_EXTENS
         raise FileValidationError(f"File has no extension: {filename!r}")
     ext = basename.rsplit(".", 1)[-1].lower()
     if ext not in allowed:
-        raise FileValidationError(
-            f"Unsupported extension {ext!r}. Allowed: {sorted(allowed)}"
-        )
+        raise FileValidationError(f"Unsupported extension {ext!r}. Allowed: {sorted(allowed)}")
     return ext
 
 
@@ -82,12 +79,11 @@ def validate_size(size: int, max_bytes: int) -> None:
     if size < 0:
         raise FileValidationError("Negative size")
     if size > max_bytes:
-        raise FileValidationError(
-            f"File too large: {size} bytes (max {max_bytes})"
-        )
+        raise FileValidationError(f"File too large: {size} bytes (max {max_bytes})")
 
 
 # ---------- path-traversal guard ----------
+
 
 def safe_join(base: Path | str, *parts: str) -> Path:
     """
@@ -127,9 +123,9 @@ __all__ = [
     "SUPPORTED_EXTENSIONS",
     "FileValidationError",
     "PathTraversalError",
+    "escape_html",
     "safe_filename",
+    "safe_join",
     "validate_extension",
     "validate_size",
-    "safe_join",
-    "escape_html",
 ]

@@ -14,18 +14,26 @@ import math
 from functools import lru_cache
 
 import numpy as np
+import structlog
+
+logger = structlog.get_logger(__name__)
 
 MODEL_NAME_DEFAULT = "distilgpt2"
 
 
 @lru_cache(maxsize=1)
 def _load_model(name: str):
-    """Load tokenizer + model. Cached for the process lifetime."""
+    """Load tokenizer + model. Cached for the process lifetime.
+
+    `revision="main"` pins the Hugging Face Hub snapshot to a specific ref
+    so a malicious or accidental upstream change cannot silently swap
+    model weights. Bump this when intentionally upgrading.
+    """
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    tok = AutoTokenizer.from_pretrained(name)
-    model = AutoModelForCausalLM.from_pretrained(name)
+    tok = AutoTokenizer.from_pretrained(name, revision="main")  # noqa: S615
+    model = AutoModelForCausalLM.from_pretrained(name, revision="main")  # noqa: S615
     model.eval()
     return tok, model, torch
 
@@ -56,7 +64,8 @@ def _sentence_perplexities(text: str, model_name: str = MODEL_NAME_DEFAULT) -> l
             if math.isnan(loss) or math.isinf(loss):
                 continue
             ppls.append(math.exp(loss))
-        except Exception:  # noqa: BLE001
+        except Exception as exc:
+            logger.debug("perplexity.sentence_skipped", error=str(exc))
             continue
     return ppls
 
@@ -74,4 +83,4 @@ def mean_perplexity(text: str, model_name: str = MODEL_NAME_DEFAULT) -> tuple[fl
     return float(np.mean(ppls)), float(np.std(ppls))
 
 
-__all__ = ["mean_perplexity", "MODEL_NAME_DEFAULT"]
+__all__ = ["MODEL_NAME_DEFAULT", "mean_perplexity"]

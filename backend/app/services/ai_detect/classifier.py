@@ -14,7 +14,7 @@ from __future__ import annotations
 import logging
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 import joblib
 import numpy as np
@@ -28,7 +28,7 @@ CLASSES: tuple[Literal["human", "ai", "plagiarised"], ...] = ("human", "ai", "pl
 
 
 @lru_cache(maxsize=1)
-def _load_model(path: str) -> tuple[object, str] | None:
+def _load_model(path: str) -> tuple[Any, str] | None:
     """Load a persisted sklearn pipeline; return None if file is missing."""
     if not path:
         return None
@@ -37,7 +37,7 @@ def _load_model(path: str) -> tuple[object, str] | None:
         return None
     try:
         model = joblib.load(p)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.warning("ai_classifier.load_failed: %s (%s)", path, exc)
         return None
     return model, f"joblib-{p.stat().st_mtime:.0f}"
@@ -76,7 +76,9 @@ def _heuristic_proba(features: FeatureVector) -> dict[str, float]:
     }
 
 
-def predict_proba(text: str, model_path: str) -> tuple[str, dict[str, float], dict[str, float], str]:
+def predict_proba(
+    text: str, model_path: str
+) -> tuple[str, dict[str, float], dict[str, float], str]:
     """
     Return (label, probabilities, features_dict, model_version).
     """
@@ -92,17 +94,17 @@ def predict_proba(text: str, model_path: str) -> tuple[str, dict[str, float], di
             arr = features.to_array().reshape(1, -1)
             probs = model.predict_proba(arr)[0]
             classes = list(model.classes_)
-            proba = {str(c).lower(): float(p) for c, p in zip(classes, probs)}
+            proba = {str(c).lower(): float(p) for c, p in zip(classes, probs, strict=False)}
             # Ensure all three classes are present
             for c in CLASSES:
                 proba.setdefault(c, 0.0)
-        except Exception as exc:  # noqa: BLE001
-            logger.warning("ai_classifier.predict_failed", error=str(exc))
+        except Exception as exc:
+            logger.warning("ai_classifier.predict_failed: %s", exc)
             proba = _heuristic_proba(features)
             version = MODEL_VERSION
 
-    label = max(proba, key=proba.get)
+    label = max(proba, key=lambda k: proba[k])
     return label, proba, features_dict, version
 
 
-__all__ = ["predict_proba", "CLASSES", "MODEL_VERSION"]
+__all__ = ["CLASSES", "MODEL_VERSION", "predict_proba"]

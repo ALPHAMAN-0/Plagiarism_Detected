@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 import uuid
-from typing import Sequence
+from collections.abc import Sequence
 
 from .algorithms.base import Match
 from .algorithms.registry import get_algo
@@ -47,10 +47,10 @@ def run_detection(
     algo.fit(list(corpus_chunks))
     matches: list[Match] = algo.score(query_chunks, top_k=top_k, threshold=threshold)
     logger.info(
-        "detection.done",
-        algorithm=algorithm,
-        query_chunks=len(query_chunks),
-        matches=len(matches),
+        "detection.done algorithm=%s query_chunks=%d matches=%d",
+        algorithm,
+        len(query_chunks),
+        len(matches),
     )
     return build_report(
         document_id=doc_id,

@@ -14,7 +14,7 @@ from .jaccard import JaccardAlgo
 from .tfidf import TfidfAlgo
 from .winnowing import WinnowingAlgo
 
-__all__ = ["ALGOS", "get_algo", "UnknownAlgorithmError", "Match", "SimilarityAlgo"]
+__all__ = ["ALGOS", "Match", "SimilarityAlgo", "UnknownAlgorithmError", "get_algo"]
 
 
 class UnknownAlgorithmError(KeyError):

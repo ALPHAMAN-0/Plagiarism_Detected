@@ -31,7 +31,7 @@ def test_chunk_text_short_doc_single_chunk() -> None:
 
 
 def test_chunk_text_long_doc_produces_multiple_chunks() -> None:
-    # 100 sentences × 3 words each = 300 words
+    # 100 sentences x 3 words each = 300 words
     text = " ".join(f"Sentence number {i} here." for i in range(100))
     chunks = chunk_text(text, target_size=40, max_size=80, overlap=0)
     assert len(chunks) > 1

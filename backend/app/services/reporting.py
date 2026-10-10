@@ -83,4 +83,4 @@ def report_to_dict(report: Report) -> dict:
     }
 
 
-__all__ = ["build_report", "report_to_dict", "Report", "ReportMatch", "SNIPPET_LIMIT"]
+__all__ = ["SNIPPET_LIMIT", "Report", "ReportMatch", "build_report", "report_to_dict"]

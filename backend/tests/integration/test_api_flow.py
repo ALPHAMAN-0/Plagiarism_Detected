@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import io
-from pathlib import Path
 
 
 def _upload(client, content: bytes, filename: str = "doc.txt") -> str:

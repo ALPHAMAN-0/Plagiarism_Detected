@@ -10,7 +10,6 @@ from __future__ import annotations
 import threading
 import uuid
 from dataclasses import dataclass, field
-from typing import Optional
 
 
 @dataclass
@@ -39,9 +38,7 @@ class DocumentStore:
 
     # ----- documents -----
 
-    def add_document(
-        self, filename: str, text: str, sha256: str, size: int
-    ) -> StoredDocument:
+    def add_document(self, filename: str, text: str, sha256: str, size: int) -> StoredDocument:
         doc_id = f"doc_{uuid.uuid4().hex[:12]}"
         doc = StoredDocument(
             document_id=doc_id,
@@ -54,7 +51,7 @@ class DocumentStore:
             self._docs[doc_id] = doc
         return doc
 
-    def get_document(self, document_id: str) -> Optional[StoredDocument]:
+    def get_document(self, document_id: str) -> StoredDocument | None:
         return self._docs.get(document_id)
 
     # ----- corpus -----
@@ -66,7 +63,7 @@ class DocumentStore:
             self._corphora[corpus_id] = entry
         return entry
 
-    def get_corpus(self, corpus_id: str) -> Optional[CorpusEntry]:
+    def get_corpus(self, corpus_id: str) -> CorpusEntry | None:
         return self._corphora.get(corpus_id)
 
     def list_corpora(self) -> list[CorpusEntry]:

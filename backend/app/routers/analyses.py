@@ -10,6 +10,7 @@ POST /api/v1/analyses/detect
 from __future__ import annotations
 
 import logging
+
 from fastapi import APIRouter, HTTPException, status
 
 from ..schemas import DetectRequest, DetectResponse, ReportMatchOut

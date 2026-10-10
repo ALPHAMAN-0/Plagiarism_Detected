@@ -9,7 +9,7 @@ from __future__ import annotations
 import io
 import logging
 
-from .security import SUPPORTED_EXTENSIONS, FileValidationError, validate_extension
+from .security import SUPPORTED_EXTENSIONS, validate_extension
 
 logger = logging.getLogger(__name__)
 
@@ -65,8 +65,8 @@ def _extract_pdf(payload: bytes) -> str:
     for page in reader.pages:
         try:
             chunks.append(page.extract_text() or "")
-        except Exception as exc:  # noqa: BLE001
-            logger.warning("pdf_page_extract_failed", error=str(exc))
+        except Exception as exc:
+            logger.warning("pdf_page_extract_failed: %s", exc)
     return "\n".join(chunks).strip()
 
 

@@ -3,15 +3,18 @@
 from __future__ import annotations
 
 from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
 class _Strict(BaseModel):
     """Base for request/response models — reject unknown fields."""
+
     model_config = ConfigDict(extra="forbid")
 
 
 # ----- documents -----
+
 
 class DocumentUploadResponse(_Strict):
     document_id: str
@@ -23,6 +26,7 @@ class DocumentUploadResponse(_Strict):
 
 
 # ----- corpus -----
+
 
 class CorpusAddRequest(_Strict):
     document_id: str
@@ -36,6 +40,7 @@ class CorpusAddResponse(_Strict):
 
 
 # ----- detect -----
+
 
 class DetectRequest(_Strict):
     document_id: str
@@ -59,6 +64,7 @@ class DetectResponse(_Strict):
 
 
 # ----- predict -----
+
 
 class PredictRequest(_Strict):
     document_id: str

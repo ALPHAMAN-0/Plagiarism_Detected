@@ -47,9 +47,7 @@ class TfidfAlgo:
         self._corpus_matrix = self._vectorizer.fit_transform(corpus_chunks)
         self._corpus_snippets = list(corpus_chunks)
 
-    def score(
-        self, query_chunks: list[str], top_k: int = 5, threshold: float = 0.0
-    ) -> list[Match]:
+    def score(self, query_chunks: list[str], top_k: int = 5, threshold: float = 0.0) -> list[Match]:
         if not query_chunks or self._vectorizer is None or self._corpus_matrix is None:
             return []
         qm = self._vectorizer.transform(query_chunks)
