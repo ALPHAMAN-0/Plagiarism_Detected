@@ -3,7 +3,7 @@
 
 .PHONY: help install backend-install frontend-install
 .PHONY: backend-test frontend-test type-check lint security build diff verify clean
-.PHONY: backend-lint backend-format frontend-lint
+.PHONY: backend-lint backend-format frontend-lint backend-train
 
 BACKEND_DIR := backend
 FRONTEND_DIR := frontend
@@ -40,6 +40,14 @@ backend-lint:
 
 backend-format:
 	cd $(BACKEND_DIR) && uv run ruff format
+
+# Train the AI/human/plagiarism classifier. Persists the .joblib model to
+# app/ml_models/ai_classifier.joblib. Required by the trained-model smoke
+# tests in tests/unit/test_trained_model.py.
+backend-train:
+	cd $(BACKEND_DIR) && uv run python -m app.services.ai_detect.train \
+		--csv data/ai_train.csv \
+		--out app/ml_models/ai_classifier.joblib
 
 frontend-test:
 	cd $(FRONTEND_DIR) && npx vitest run
