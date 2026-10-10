@@ -26,8 +26,6 @@ dist/
 .DS_Store
 
 # Env / secrets (CRITICAL — keep out of repo)
-.env
-.env.local
 .env.*.local
 *.pem
 *.key
@@ -44,7 +42,6 @@ backend/app/ml_models/*.pkl
 
 # IDE
 .idea/
-.vscode/
 *.swp
 
 # OS
@@ -55,3 +52,4 @@ Thumbs.db
 .pytest_cache/
 coverage/
 .nyc_output/
+config.bat
