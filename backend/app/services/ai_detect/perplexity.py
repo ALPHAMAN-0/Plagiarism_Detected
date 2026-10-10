@@ -32,8 +32,8 @@ def _load_model(name: str):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    tok = AutoTokenizer.from_pretrained(name, revision="main")  # noqa: S615
-    model = AutoModelForCausalLM.from_pretrained(name, revision="main")  # noqa: S615
+    tok = AutoTokenizer.from_pretrained(name, revision="main")
+    model = AutoModelForCausalLM.from_pretrained(name, revision="main")
     model.eval()
     return tok, model, torch
 

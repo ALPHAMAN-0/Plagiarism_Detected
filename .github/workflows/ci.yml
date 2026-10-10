@@ -28,7 +28,7 @@ jobs:
 
       - name: Sync dependencies
         working-directory: backend
-        run: uv sync --python ${{ matrix.python-version }}
+        run: uv sync --python ${{ matrix.python-version }} --extra dev
 
       - name: Lint (ruff)
         working-directory: backend

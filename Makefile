@@ -27,7 +27,7 @@ help:
 install: backend-install frontend-install
 
 backend-install:
-	cd $(BACKEND_DIR) && uv sync
+	cd $(BACKEND_DIR) && uv sync --extra dev
 
 frontend-install:
 	cd $(FRONTEND_DIR) && npm ci

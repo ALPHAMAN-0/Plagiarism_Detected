@@ -12,7 +12,7 @@ near-exact copies.
 from __future__ import annotations
 
 import re
-from typing import Hashable
+from collections.abc import Hashable
 
 from .base import Match
 
