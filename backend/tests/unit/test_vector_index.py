@@ -53,3 +53,17 @@ def test_add_normalises_vector() -> None:
     idx.add(source_id=1, text="x", vector=big)
     v = idx.entries[0].vector
     assert abs(float(np.linalg.norm(v)) - 1.0) < 1e-5
+
+
+def test_max_items_caps_index_size() -> None:
+    """VectorIndex must enforce a configurable max_items cap to prevent
+    unbounded memory growth in long-running deployments.
+
+    Mirrors the fix MiroFish made to fetch_all_edges (PR #513).
+    """
+    idx = VectorIndex(name="capped", max_items=3)
+    for i in range(5):
+        idx.add(source_id=i, text=f"t{i}", vector=_vec([1.0, 0.0, 0.0]))
+    assert len(idx.entries) == 3
+    # The first 2 entries are dropped (FIFO eviction).
+    assert [e.source_id for e in idx.entries] == [2, 3, 4]
