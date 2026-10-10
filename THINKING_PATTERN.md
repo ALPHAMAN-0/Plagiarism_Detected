@@ -7,6 +7,28 @@
 
 ---
 
+## Reading order
+
+This file is the **why**. The skills are the **how**. Read in this order:
+
+1. `THINKING_PATTERN.md` (this file) — the MiroFish derivation, the phase
+   roadmap, the commit-message templates
+2. `~/.puku-cli/skills/commit-thinking/SKILL.md` — the cross-repo skill that
+   enforces the discipline at every commit
+3. `.puku-cli/skills/commit-thinking/SKILL.md` — the Plagiarism_Detected
+   layer with algorithm scopes, step names, phase tracker rules, and
+   threat-model-aware security defaults
+
+The skills are **invokable**: they activate when you ask for the next
+commit, when `tdd-workflow` has just produced a passing test, or when you
+explicitly invoke `/commit-thinking`. The markdown file is a reference doc
+for humans and for the skill to consult — it does not enforce anything on
+its own.
+
+If you change the rules here, update both skills to match.
+
+---
+
 ## 0. The principle underneath the pattern
 
 MiroFish did **not** follow Conventional Commits as a religion. Only 37 of 322
@@ -355,6 +377,7 @@ commit.**
 | 6 | Hardening (CI/Docker/ESLint/bandit) | 2026-10-10 | 2026-10-10 | `1df25c6` |
 | 7 | Dep upgrade (CVE) | 2026-10-10 | 2026-10-10 | `87951d4` |
 | 8 | TDD evidence report | 2026-10-10 | 2026-10-10 | `9c99c88` |
+| 8.1 | Thinking pattern + skills wired up | 2026-10-10 | 2026-10-10 | this file + `~/.puku-cli/skills/commit-thinking/SKILL.md` + `.puku-cli/skills/commit-thinking/SKILL.md` |
 | 9 | **ARCHITECTURE.md** | — | — | **NEXT** |
 | 10 | Step1Upload | — | — | — |
 | 11 | Step2AlgorithmPicker | — | — | — |
@@ -365,3 +388,32 @@ commit.**
 | 16 | i18n + community | — | — | — |
 
 Update this table as phases close.
+
+### Closing a phase
+
+When a phase closes, the closing commit must:
+
+1. Carry the phase marker: `(PHASE N GREEN)` or `(PHASE N RED)`.
+2. Update this table in the same commit (Started, Completed, Notes).
+3. Reference the prior TDD evidence at `docs/releases/<phase>/...tdd.md` if
+   one was produced by the `tdd-workflow` skill.
+4. Include the test count or coverage delta in the body.
+5. Trigger the repo-level `commit-thinking` skill (see
+   `.puku-cli/skills/commit-thinking/SKILL.md` §9 "Closing a Phase").
+
+The repo-level skill will refuse to write the commit if the table is not
+updated. The user-level skill will refuse to write the commit if the
+subject does not carry the phase marker. Both gates are intentional.
+
+### Skill locations (for future reference)
+
+| Skill | Path | Purpose |
+|---|---|---|
+| User-level `commit-thinking` | `~/.puku-cli/skills/commit-thinking/SKILL.md` | Cross-repo MiroFish-derived discipline (prefixes, templates, anti-patterns) |
+| Repo-level `commit-thinking` | `.puku-cli/skills/commit-thinking/SKILL.md` | Plagiarism_Detected layer (algorithm scopes, step names, phase tracker, threat-model, perf envelope) |
+| TDD workflow | `~/.puku-cli/skills/tdd-workflow/SKILL.md` | Produces RED/GREEN evidence; pairs with `commit-thinking` for the commit-message shape |
+| Git workflow | `~/.puku-cli/skills/git-workflow/SKILL.md` | Branching, PR conventions; sits below `commit-thinking` |
+| Verification loop | `~/.puku-cli/skills/verification-loop/SKILL.md` | Run before closing a phase; produces the evidence file referenced above |
+| Security review | `~/.puku-cli/skills/security-review/SKILL.md` | Produces findings that the `fix(security):` template wraps |
+
+When any of these skills change, update this table.
