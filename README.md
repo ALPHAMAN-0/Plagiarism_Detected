@@ -3,6 +3,23 @@
 A two-feature web app that detects plagiarism in documents and predicts whether
 a document is **human-written**, **AI-generated**, or **plagiarised**.
 
+## Architecture / How it Works
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as Client
+    participant S as Server
+    participant DB as Database
+    U->>C: trigger action
+    C->>S: send request
+    S->>DB: query / mutate
+    DB-->>S: result
+    S-->>C: response
+    C-->>U: update UI
+```
+
+
 > Built with FastAPI + React + scikit-learn + sentence-transformers.
 
 ## Features
